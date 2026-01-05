@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Checkout - Complete your purchase of Irish land">
+    <title>Checkout - Buy Ireland</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Square Web Payments SDK - SANDBOX MODE -->
+    <script type="text/javascript" src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo"><img src="images/logo.png" alt="Buy Ireland"></a>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="what-you-get.html">What You Get</a></li>
+                    <li><a href="our-story.html">Our Story</a></li>
+                    <li><a href="faqs.html">FAQs</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="checkout.html?quantity=1" class="btn-primary">Buy Now</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Checkout Page -->
+    <section class="checkout-section">
+        <div class="container">
+            <div class="checkout-layout">
+                <!-- Progress Steps -->
+                <div class="checkout-progress">
+                    <div class="progress-step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Order & Names</div>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Your Details</div>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Shipping</div>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Payment</div>
+                    </div>
+                </div>
+
+                <div class="checkout-content">
+                    <!-- Left Column - Forms -->
+                    <div class="checkout-main">
+                        <!-- Step 1: Order & Certificate Names -->
+                        <div class="checkout-step" id="step1">
+                            <h2>Review Your Order</h2>
+                            <div class="order-review">
+                                <div class="product-summary">
+                                    <img src="images/irish-countryside-main.jpg" alt="Irish countryside" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22100%22 height=%22100%22/%3E%3Ctext fill=%22%23059669%22 font-family=%22Arial%22 font-size=%2214%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EIrish Land%3C/text%3E%3C/svg%3E'">
+                                    <div>
+                                        <h3>One Square Foot of Ireland</h3>
+                                        <p class="quantity-display">Quantity: <span id="reviewQuantity">1</span></p>
+                                        <p class="price-per-unit">$99.99 per plot</p>
+                                    </div>
+                                </div>
+
+                                <div class="quantity-adjuster">
+                                    <label for="checkoutQuantity">Adjust Quantity:</label>
+                                    <div class="quantity-controls">
+                                        <button type="button" class="qty-btn" id="decreaseQty">-</button>
+                                        <input type="number" id="checkoutQuantity" name="quantity" value="1" min="1" max="99">
+                                        <button type="button" class="qty-btn" id="increaseQty">+</button>
+                                    </div>
+                                    <div id="volume-discount-notification" class="hidden" style="margin-top: 0.75rem;">
+                                        <div class="coupon-success">
+                                            ✓ Volume Discount Applied! You're saving 10% on 6 or more plots
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Certificate Names Section -->
+                            <div class="certificate-names-section">
+                                <div id="plotDetailsContainer">
+                                    <!-- Certificate name inputs will be dynamically generated here -->
+                                </div>
+
+                                <button type="button" class="btn-hero continue-btn" id="continueToDetails">
+                                    Continue to Your Details
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Your Details -->
+                        <div class="checkout-step hidden" id="step2">
+                            <h2>Your Contact & Delivery Information</h2>
+                            <p class="step-description">Please verify your details carefully - certificates and documentation will be sent to this address.</p>
+
+                            <div class="details-form">
+                                <!-- Combined Contact & Delivery Information -->
+                                <div class="contact-delivery-section">
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="firstName">First Name *</label>
+                                            <input type="text" id="firstName" name="firstName" autocomplete="given-name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="lastName">Last Name *</label>
+                                            <input type="text" id="lastName" name="lastName" autocomplete="family-name" required>
+                                        </div>
+                                        <div class="form-group full-width">
+                                            <label for="email">Email Address *</label>
+                                            <input type="email" id="email" name="email" autocomplete="email" required>
+                                        </div>
+                                        <div class="form-group full-width">
+                                            <label for="phone">Phone Number *</label>
+                                            <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+                                        </div>
+                                        <div class="form-group full-width">
+                                            <label for="address1">Address Line 1 *</label>
+                                            <input type="text" id="address1" name="address1" autocomplete="address-line1" required>
+                                        </div>
+                                        <div class="form-group full-width">
+                                            <label for="address2">Address Line 2</label>
+                                            <input type="text" id="address2" name="address2" autocomplete="address-line2">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="city">City *</label>
+                                            <input type="text" id="city" name="city" autocomplete="address-level2" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="state">State/Province *</label>
+                                            <input type="text" id="state" name="state" autocomplete="address-level1" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="zip">Postal Code *</label>
+                                            <input type="text" id="zip" name="zip" autocomplete="postal-code" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="country">Country *</label>
+                                            <select id="country" name="country" autocomplete="country" required>
+                                                <option value="">Select Country</option>
+                                                <option value="US">United States</option>
+                                                <option value="CA">Canada</option>
+                                                <option value="GB">United Kingdom</option>
+                                                <option value="IE">Ireland</option>
+                                                <option value="AU">Australia</option>
+                                                <option value="NZ">New Zealand</option>
+                                                <option value="DE">Germany</option>
+                                                <option value="FR">France</option>
+                                                <option value="ES">Spain</option>
+                                                <option value="IT">Italy</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="step-navigation">
+                                    <button type="button" class="btn-secondary" id="backToOrder">Back to Order</button>
+                                    <button type="button" class="btn-hero" id="continueToShipping">Continue to Shipping</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Shipping Method -->
+                        <div class="checkout-step hidden" id="step3">
+                            <h2>Choose Your Shipping Method</h2>
+                            <p class="step-description">Select how you'd like to receive your certificate package.</p>
+
+                            <div class="shipping-method-section">
+                                <div class="shipping-options">
+                                    <label class="shipping-option">
+                                        <input type="radio" name="shippingMethod" value="standard" checked>
+                                        <div class="shipping-option-content">
+                                            <div class="shipping-option-header">
+                                                <strong>Standard Airmail</strong>
+                                                <span class="shipping-price free-badge">FREE</span>
+                                            </div>
+                                            <p class="shipping-description">Delivery in 10-21 business days. No tracking available.</p>
+                                        </div>
+                                    </label>
+                                    <label class="shipping-option">
+                                        <input type="radio" name="shippingMethod" value="express">
+                                        <div class="shipping-option-content">
+                                            <div class="shipping-option-header">
+                                                <strong>Tracked Express Shipping</strong>
+                                                <span class="shipping-price">$44.00</span>
+                                            </div>
+                                            <p class="shipping-description">Delivery in 5-10 business days with full tracking.</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="step-navigation">
+                                    <button type="button" class="btn-secondary" id="backToDetails">Back to Your Details</button>
+                                    <button type="button" class="btn-hero" id="continueToPayment">Continue to Payment</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Payment -->
+                        <div class="checkout-step hidden" id="step4">
+                            <h2>Complete Your Purchase</h2>
+                            <p class="step-description">Enter your payment details to finalize your order.</p>
+
+                            <div class="payment-form">
+                                <!-- Order Summary Review -->
+                                <div class="review-summary">
+                                    <h3>Review Your Order</h3>
+                                    <div class="review-item">
+                                        <span>Plots Ordered:</span>
+                                        <strong id="reviewPlotCount">1</strong>
+                                    </div>
+                                    <div class="review-item">
+                                        <span>Delivery To:</span>
+                                        <strong id="reviewDeliveryName">-</strong>
+                                    </div>
+                                    <div class="review-item">
+                                        <span>Shipping Address:</span>
+                                        <div id="reviewAddress" class="review-address">-</div>
+                                    </div>
+                                    <div class="review-item">
+                                        <span>Shipping Method:</span>
+                                        <strong id="reviewShippingMethod">Standard Airmail (Free)</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Coupon Code Section -->
+                                <div class="coupon-section">
+                                    <h3>Have a Coupon Code?</h3>
+                                    <div class="coupon-input-group">
+                                        <input type="text"
+                                               id="couponCode"
+                                               name="couponCode"
+                                               placeholder="Enter coupon code"
+                                               autocomplete="off">
+                                        <button type="button" class="btn-secondary" id="applyCoupon">Apply</button>
+                                    </div>
+                                    <div id="coupon-status"></div>
+                                </div>
+
+                                <!-- Payment Information -->
+                                <div class="payment-section">
+                                    <h3>Payment Information</h3>
+                                    <p class="payment-note">Enter your card details below. We accept cards from all countries.</p>
+                                    <div id="card-container"></div>
+                                    <p class="postal-code-note"><small>Note: The postal code should match your card's billing address</small></p>
+                                </div>
+
+                                <div id="payment-status-container"></div>
+
+                                <div class="step-navigation">
+                                    <button type="button" class="btn-secondary" id="backToShipping">Back to Shipping</button>
+                                    <button type="button" class="btn-hero" id="completePayment">
+                                        Complete Purchase - $<span id="finalTotal">99.99</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column - Order Summary -->
+                    <div class="checkout-sidebar">
+                        <div class="order-summary-card">
+                            <h3>Order Summary</h3>
+
+                            <div class="summary-line">
+                                <span>Plots:</span>
+                                <span id="summaryQuantity">1</span>
+                            </div>
+
+                            <div class="summary-line">
+                                <span>Price per plot:</span>
+                                <span>$99.99</span>
+                            </div>
+
+                            <div class="summary-line subtotal">
+                                <span>Subtotal:</span>
+                                <span id="summarySubtotal">$99.99</span>
+                            </div>
+
+                            <div class="summary-line discount-line hidden" id="summaryDiscountLine">
+                                <span>Discount (<span id="summaryDiscountCode"></span>):</span>
+                                <span class="discount-amount" id="summaryDiscount">-$0.00</span>
+                            </div>
+
+                            <div class="summary-line">
+                                <span>Shipping:</span>
+                                <span id="summaryShipping"><span class="free-badge">FREE</span></span>
+                            </div>
+
+                            <div class="summary-line total">
+                                <span>Total:</span>
+                                <span id="summaryTotal">$99.99</span>
+                            </div>
+
+                            <div class="trust-badges-small">
+                                <div class="trust-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                    </svg>
+                                    <span>Secure Checkout</span>
+                                </div>
+                                <div class="trust-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="24" height="24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span>Est. 2003</span>
+                                </div>
+                            </div>
+
+                            <div class="whats-included">
+                                <h4>Each Plot Includes:</h4>
+                                <ul>
+                                    <li>Personalized Certificate</li>
+                                    <li>Deed of Assurance</li>
+                                    <li>Land Photos (2x)</li>
+                                    <li>GPS Coordinates</li>
+                                    <li>Detailed Maps</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Buy Ireland</h4>
+                    <p>Connecting people to the timeless beauty of Irish countryside, one square foot at a time.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="what-you-get.html">What You Get</a></li>
+                        <li><a href="our-story.html">Our Story</a></li>
+                        <li><a href="faqs.html">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="testimonials.html">Testimonials</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Secure Payment</h4>
+                    <p>Powered by Square</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Buy Ireland. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/checkout.js"></script>
+</body>
+</html>

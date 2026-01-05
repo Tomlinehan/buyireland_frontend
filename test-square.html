@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Square Payment Test</title>
+    <script type="text/javascript" src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        #card-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        button {
+            background-color: #2d6a4f;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #1b4332;
+        }
+    </style>
+</head>
+<body>
+    <h1>Square Payment Integration Test</h1>
+
+    <div id="status"></div>
+
+    <h2>Step 1: Check Square SDK</h2>
+    <p id="sdk-status">Checking...</p>
+
+    <h2>Step 2: Initialize Payments</h2>
+    <p id="init-status">Waiting...</p>
+
+    <h2>Step 3: Card Form</h2>
+    <div id="card-container"></div>
+    <p id="card-status">Waiting...</p>
+
+    <button onclick="testTokenization()">Test Card Tokenization</button>
+
+    <script>
+        const APP_ID = 'sandbox-sq0idb-lBNpYQ7rRHcNjbvXdcjJ9g';
+        const LOCATION_ID = 'LNWW9H24A5AZY';
+
+        let payments;
+        let card;
+
+        // Step 1: Check if Square SDK loaded
+        window.addEventListener('load', async () => {
+            console.log('Page loaded, checking Square...');
+
+            if (window.Square) {
+                document.getElementById('sdk-status').innerHTML = '✅ Square SDK loaded successfully';
+                document.getElementById('sdk-status').className = 'status success';
+                await initializePayments();
+            } else {
+                document.getElementById('sdk-status').innerHTML = '❌ Square SDK failed to load';
+                document.getElementById('sdk-status').className = 'status error';
+            }
+        });
+
+        // Step 2: Initialize Square Payments
+        async function initializePayments() {
+            try {
+                console.log('Initializing payments with:', { APP_ID, LOCATION_ID });
+
+                payments = await Square.payments(APP_ID, LOCATION_ID);
+
+                document.getElementById('init-status').innerHTML = '✅ Square Payments initialized';
+                document.getElementById('init-status').className = 'status success';
+
+                await initializeCard();
+            } catch (error) {
+                console.error('Payment initialization error:', error);
+                document.getElementById('init-status').innerHTML = `❌ Failed to initialize: ${error.message}`;
+                document.getElementById('init-status').className = 'status error';
+            }
+        }
+
+        // Step 3: Initialize Card
+        async function initializeCard() {
+            try {
+                card = await payments.card();
+                await card.attach('#card-container');
+
+                document.getElementById('card-status').innerHTML = '✅ Card form ready';
+                document.getElementById('card-status').className = 'status success';
+            } catch (error) {
+                console.error('Card initialization error:', error);
+                document.getElementById('card-status').innerHTML = `❌ Failed to load card form: ${error.message}`;
+                document.getElementById('card-status').className = 'status error';
+            }
+        }
+
+        // Test tokenization
+        async function testTokenization() {
+            if (!card) {
+                alert('Card form not initialized');
+                return;
+            }
+
+            try {
+                console.log('Attempting to tokenize card...');
+                const result = await card.tokenize();
+
+                if (result.status === 'OK') {
+                    console.log('Token:', result.token);
+                    alert('✅ Tokenization successful!\n\nToken: ' + result.token);
+                } else {
+                    console.error('Tokenization failed:', result.errors);
+                    alert('❌ Tokenization failed:\n\n' + JSON.stringify(result.errors, null, 2));
+                }
+            } catch (error) {
+                console.error('Tokenization error:', error);
+                alert('❌ Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
